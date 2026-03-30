@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CE.CO.L - Simulazione Esame A2 e B1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e3a5f;
+            --secondary: #6c757d;
+            --a2-color: #2e8b57;
+            --b1-color: #c9a227;
+            --parchment: #faf8f3;
+            --light: #f8f9fa;
+            --border: #dee2e6;
+            --text-dark: #2c3e50;
+            --error: #c53030;
+            --error-bg: #fed7d7;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background-color: var(--parchment);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: normal;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            flex: 1;
+        }
+
+        .login-section {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .login-title {
+            text-align: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group input.error {
+            border-color: var(--error);
+            background: var(--error-bg);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .sectors-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .sector-card {
+            background: white;
+            border: 2px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .sector-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .sector-a2 {
+            border-color: var(--a2-color);
+        }
+
+        .sector-a2:hover {
+            border-color: var(--a2-color);
+            background: linear-gradient(135deg, #f0fdf4 0%, white 100%);
+        }
+
+        .sector-b1 {
+            border-color: var(--b1-color);
+        }
+
+        .sector-b1:hover {
+            border-color: var(--b1-color);
+            background: linear-gradient(135deg, #fefce8 0%, white 100%);
+        }
+
+        .sector-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .sector-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .sector-a2 .sector-title {
+            color: var(--a2-color);
+        }
+
+        .sector-b1 .sector-title {
+            color: var(--b1-color);
+        }
+
+        .sector-desc {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .sector-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .sector-a2 .sector-badge {
+            background: var(--a2-color);
+            color: white;
+        }
+
+        .sector-b1 .sector-badge {
+            background: var(--b1-color);
+            color: #000;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background 0.3s;
+        }
+
+        .btn-login:hover {
+            background: #002147;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #e7f3ff;
+            border-left: 4px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .welcome-message strong {
+            color: var(--primary);
+        }
+
+        .btn-logout {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            border-radius: 4px;
+        }
+
+        .btn-logout:hover {
+            background: #5a6268;
+        }
+
+        footer {
+            background: var(--light);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        @media (max-width: 768px) {
+            .sectors-section {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.4rem;
+            }
+
+            .main-container {
+                padding: 2rem 1rem;
+            }
+
+            .welcome-message {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>UNIDA Università per Stranieri "Dante Alighieri" - Reggio Calabria</h1>
+        <p>Sede Accreditata di Treviso - Simulazione Esame A2 e B1</p>
+    </header>
+
+    <main class="main-container">
+        <!-- Sezione Login -->
+        <div id="loginSection" class="login-section">
+            <h2 class="login-title">🔐 Accesso Studenti</h2>
+
+            <div class="form-group">
+                <label for="username">Nome Utente</label>
+                <input type="text" id="username" placeholder="Inserisci username">
+                <div class="error-message" id="username-error">Username non valido</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Inserisci password">
+                <div class="error-message" id="password-error">Password non valida</div>
+            </div>
+
+            <button class="btn-login" onclick="doLogin()">Accedi</button>
+        </div>
+
+        <!-- Sezione Settori (nascosta fino al login) -->
+        <div id="sectorsSection" class="hidden">
+            <div class="welcome-message">
+                <span><strong>Benvenuto!</strong> Seleziona il livello dell'esame.</span>
+                <button class="btn-logout" onclick="doLogout()">🚪 Esci</button>
+            </div>
+
+            <div class="sectors-section">
+                <a href="esame_finale_a2.html" target="_blank" class="sector-card sector-a2">
+                    <div class="sector-icon">📗</div>
+                    <div class="sector-title">Livello A2</div>
+                    <div class="sector-desc">Permesso di Lungo Soggiorno</div>
+                    <span class="sector-badge">CE.CO.L A2</span>
+                </a>
+
+                <a href="esame_finale_b1.html" target="_blank" class="sector-card sector-b1">
+                    <div class="sector-icon">📙</div>
+                    <div class="sector-title">Livello B1</div>
+                    <div class="sector-desc">Cittadinanza Italiana</div>
+                    <span class="sector-badge">CE.CO.L B1</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 UNIDA Università per Stranieri "Dante Alighieri" - Reggio Calabria</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Sede Accreditata di Treviso - Simulazione Esame CE.CO.L</p>
+    </footer>
+
+    <script>
+        // Credenziali predefinite
+        const VALID_USERNAME = 'studente';
+        const VALID_PASSWORD = 'cecol2024';
+
+        // Controlla se l'utente è già loggato
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('cecol_logged_in');
+
+            if (isLoggedIn === 'true') {
+                showSectors();
+            }
+        });
+
+        function doLogin() {
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            let hasError = false;
+
+            // Reset errori
+            usernameInput.classList.remove('error');
+            passwordInput.classList.remove('error');
+            document.getElementById('username-error').classList.remove('show');
+            document.getElementById('password-error').classList.remove('show');
+
+            // Validazione
+            if (username !== VALID_USERNAME) {
+                usernameInput.classList.add('error');
+                document.getElementById('username-error').classList.add('show');
+                hasError = true;
+            }
+
+            if (password !== VALID_PASSWORD) {
+                passwordInput.classList.add('error');
+                document.getElementById('password-error').classList.add('show');
+                hasError = true;
+            }
+
+            if (hasError) {
+                return;
+            }
+
+            // Login riuscito
+            localStorage.setItem('cecol_logged_in', 'true');
+            showSectors();
+        }
+
+        function showSectors() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('sectorsSection').classList.remove('hidden');
+        }
+
+        function doLogout() {
+            localStorage.removeItem('cecol_logged_in');
+
+            // Reset form
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('username').classList.remove('error');
+            document.getElementById('password').classList.remove('error');
+            document.getElementById('username-error').classList.remove('show');
+            document.getElementById('password-error').classList.remove('show');
+
+            // Mostra login
+            document.getElementById('sectorsSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+        }
+
+        // Permetti login con tasto Enter
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                doLogin();
+            }
+        });
+
+        document.getElementById('username').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('password').focus();
+            }
+        });
+    </script>
+</body>
+</html>
